@@ -139,3 +139,14 @@ Database : MongoDB , change to SQL database in production
 - test both the endpoints on postman
 
 ---------------------------------------------------------------------------------------
+
+5. creating the socket 
+- get a socket.id, add them to connections[path], tell others, and show them past messages.
+- server forwards messages by socket id (for WebRTC).
+- server finds their path, stores the message, broadcasts it to everyone in that path.
+- server removes them and tells others they left.
+
+
+---------------------------------------------------------------------------------------
+
+6. setting up the frontend
