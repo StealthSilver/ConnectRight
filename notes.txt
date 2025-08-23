@@ -108,5 +108,15 @@ Database : MongoDB , change to SQL database in production
 - create src/server.ts 
 - npm i express @types/express cors mongoose bcrypt socketio
 - tsconfig, rootDir : "./src" , outDir: "./dist"
+- add gitignore
+- write the dev script "npx tsc -b && node dist/index.js"
 
 ---------------------------------------------------------------------------------------
+
+2. Creating the socket and http instance 
+- create a src folder and create index.ts and then three folders for route, controller, models
+- create a http server and attach it to the socket io in index.ts 
+- create the socket io contoller wrapper in the controller folder  
+- connect the mongo db 
+- add the middlewares and also limit the payload
+- start the instance 
