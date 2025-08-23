@@ -4,6 +4,7 @@ import { Server } from "socket.io";
 import mongoose from "mongoose";
 import { connectToSocket } from "./controllers/socketManager";
 import cors from "cors";
+import userRoutes from "./routes/users.routes";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -22,6 +23,8 @@ const io = connectToSocket(server, {
 });
 
 const PORT = process.env.PORT || 8000;
+
+app.use("/api/v1/users", userRoutes);
 
 const start = async () => {
   const connectDB = async () => {

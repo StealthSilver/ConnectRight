@@ -128,5 +128,14 @@ Database : MongoDB , change to SQL database in production
 - cerate the user mdoel in the models folder 
 - cerate the meeting model in the models folder
 
+---------------------------------------------------------------------------------------
+
+
+4. authentication 
+- create the signin(register) and login route.
+- write the auth logic in the user.controller.ts 
+- use the bcrypt library to hash the passeord 
+- use the jwt to return a token while logging in
+- test both the endpoints on postman
 
 ---------------------------------------------------------------------------------------
