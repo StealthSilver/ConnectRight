@@ -1,0 +1,110 @@
+CONNECT-RIGHT : a video conferencing platform
+
+Socket: this is one end of a connection. every machine on a network has ports which and ip addresses for communication 
+socket is the combination of the ip address and the port for the connected machine 
+
+Protocols: these are the rules for communication 
+
+TCP (transmission control protocol) : 
+TCP is a connection-oriented and reliable protocol,
+meaning it establishes a connection before sending data and ensures that all packets arrive in the correct order without loss.
+TCP is used in applications like web browsing (HTTP/HTTPS) and file transfers (FTP) where accuracy and reliability are crucial
+
+UDP (user datagram protocol) : 
+UDP is a connectionless and unreliable protocol, which simply sends data without establishing a connection and does not guarantee delivery or order.
+UDP is used in online gaming, video streaming, and VoIP calls, where speed and low latency are more important than perfect reliability.
+
+WebRTC protocol 
+Web real time communication, used for real time communication, built on UDP protocol 
+this is a bi-directional protol, 
+
+working of web rtc 
+
+1. Signalling
+
+Before two peers can communicate, they must exchange information about how to connect. This includes:
+Session Description Protocol (SDP) – describes media formats, codecs, and network details.
+ICE candidates – possible network paths (IP addresses and ports).
+Signalling channel – WebRTC doesn’t define this; developers use WebSocket, HTTP, or Socket.io for exchanging SDP and ICE candidates between peers via a signalling server.
+
+2. Connecting (NAT Traversal & Peer-to-Peer)
+
+Once peers know about each other, they must establish a direct path:
+STUN (Session Traversal Utilities for NAT) – helps peers discover their public IP and port behind a NAT.
+TURN (Traversal Using Relays around NAT) – if direct connection fails, peers use a relay server to pass traffic.
+ICE (Interactive Connectivity Establishment) – chooses the best path (direct if possible, otherwise relay).
+
+3. Securing 
+
+Security is built-in:
+DTLS (Datagram Transport Layer Security) – encrypts data channels.
+SRTP (Secure Real-Time Transport Protocol) – encrypts audio and video streams.
+End-to-end encryption ensures that only the peers can access the media/data, preventing eavesdropping.
+
+4. Communicating 
+
+After connection and security are established, real-time communication begins:
+Media Streams – audio/video is sent using RTP (Real-time Transport Protocol) over SRTP.
+Data Channel – a peer-to-peer channel for arbitrary data (chat, file transfer, game state sync).
+Adaptive techniques like jitter buffering, error correction, and bandwidth estimation keep communication smooth.
+
+webRTC is available as a API 
+
+1. MediaStream 
+2. RTCPeerConnection 
+3. RTCDataChannel
+
+WebRTC architecture
+
+1. P2P (Peer-to-Peer)
+How it works: Every participant sends their media stream directly to every other participant.
+
+Pros:
+Low latency (direct connection).
+No server cost for relaying media.
+Cons:
+Does not scale well — in a call with N users, each must send (N-1) streams.
+High CPU and bandwidth usage on clients.
+
+Use case: 1-to-1 video calls or very small group calls (2–3 people).
+
+2. SFU (Selective Forwarding Unit)
+How it works: Each participant sends one uplink stream to the SFU server. The SFU forwards streams to other participants without decoding them.
+
+Pros:
+More scalable (clients upload only once).
+Lower CPU/bandwidth use for participants.
+Still low latency, since the server doesn’t process media.
+Cons:
+Bandwidth still grows as the number of participants increases (each client receives multiple streams).
+
+Use case: Group video conferencing (Zoom, Google Meet, Jitsi, etc.)
+
+3. MCU (Multipoint Conferencing Unit)
+How it works: Each participant sends their stream to the MCU server. The MCU decodes, mixes, and re-encodes streams into a single combined stream and sends it back to clients.
+
+Pros:
+Each participant only needs to receive one downlink stream.
+Very efficient for clients with limited bandwidth or devices.
+Cons:
+High server cost (CPU-intensive to mix streams).
+Adds latency because of processing.
+
+Use case: Enterprise conferencing, recording, or broadcasting (e.g., a “presenter + audience” model).
+
+* on the internet upload bandwidth has a strict limit, the download bandwidth is lineant 
+
+Frameworks : 
+
+Frontend : React + MaterialUi + CSS
+Backend : node + express + bcrypt + ScoketIo 
+Database : MongoDB , change to SQL database in production 
+
+1. Backend setup 
+
+- Create a folder in the base repo 
+- npm init -y 
+- tsc --init 
+- create src/server.ts 
+- npm i express @types/express cors nodemon 
+- tsconfig, rootDir : "./src" , outDir: "./dist"
