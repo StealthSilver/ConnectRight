@@ -120,3 +120,13 @@ Database : MongoDB , change to SQL database in production
 - connect the mongo db 
 - add the middlewares and also limit the payload
 - start the instance 
+
+---------------------------------------------------------------------------------------
+
+
+3. Create the database models 
+- cerate the user mdoel in the models folder 
+- cerate the meeting model in the models folder
+
+
+---------------------------------------------------------------------------------------
