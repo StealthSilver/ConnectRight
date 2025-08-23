@@ -150,3 +150,7 @@ Database : MongoDB , change to SQL database in production
 ---------------------------------------------------------------------------------------
 
 6. setting up the frontend
+- npm create vite
+- clear all the boilerplate 
+
+---------------------------------------------------------------------------------------
