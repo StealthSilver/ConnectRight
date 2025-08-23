@@ -106,5 +106,7 @@ Database : MongoDB , change to SQL database in production
 - npm init -y 
 - tsc --init 
 - create src/server.ts 
-- npm i express @types/express cors nodemon 
+- npm i express @types/express cors mongoose bcrypt socketio
 - tsconfig, rootDir : "./src" , outDir: "./dist"
+
+---------------------------------------------------------------------------------------
