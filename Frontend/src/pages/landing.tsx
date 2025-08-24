@@ -17,7 +17,7 @@ export default function LandingPage() {
           <p>Join as guest</p>
           <p>Register</p>
 
-          <Link to="/home" className="loginBtn">
+          <Link to="/login" className="loginBtn">
             <p>Login</p>
           </Link>
         </div>
@@ -29,7 +29,7 @@ export default function LandingPage() {
             Limitless connection and collaboration <br /> with ConnectRight
           </h1>
 
-          <Link to="/home" className="loginBtn">
+          <Link to="/login" className="loginBtn">
             <p>Get Started</p>
           </Link>
         </div>

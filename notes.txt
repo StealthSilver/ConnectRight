@@ -166,3 +166,9 @@ Database : MongoDB , change to SQL database in production
 
 - create the landing page as and style it
 - link the login button to /home
+
+- npm i axios socket.io-client http-status
+- npm install @mui/material @emotion/react @emotion/styled - install material ui
+- create the authentication routes, signin and signup 
+- use material ui components for teh signin and signup pages
+- connect with the backend
