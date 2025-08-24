@@ -154,3 +154,15 @@ Database : MongoDB , change to SQL database in production
 - clear all the boilerplate 
 
 ---------------------------------------------------------------------------------------
+7. create the landing ans auth pages 
+- create pages, context, utils folders 
+- in the pages folder create a landing.tsx file
+- in the index.css use this code to remove the premade styles from the browser
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+- create the landing page as and style it
+- link the login button to /home
