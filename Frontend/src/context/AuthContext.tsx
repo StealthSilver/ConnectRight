@@ -1,65 +1,92 @@
 import React, {
   createContext,
-  useState,
+  useCallback,
   useEffect,
-  type ReactNode,
+  useMemo,
+  useState,
 } from "react";
 
-interface AuthContextType {
-  user: any;
+// If you have a real API, replace BASE_URL and the fetch calls accordingly
+const BASE_URL = import.meta.env.VITE_API_URL || "/api";
+
+type AuthContextType = {
   token: string | null;
   isAuthenticated: boolean;
-  login: (token: string, user?: any) => void;
+  loading: boolean;
+  login: (token: string) => void;
   logout: () => void;
-}
+  addToUserHistory: (meetingCode: string) => Promise<void>;
+  getHistoryOfUser: () => Promise<Array<{ meetingCode: string; date: string }>>;
+};
 
-export const AuthContext = createContext<AuthContextType>({
-  user: null,
-  token: null,
-  isAuthenticated: false,
-  login: () => {},
-  logout: () => {},
-});
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined
+);
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<any>(null);
-  const [token, setToken] = useState<string | null>(null);
+export const AuthProvider: React.FC<React.PropsWithChildren> = ({
+  children,
+}) => {
+  const [token, setToken] = useState<string | null>(() =>
+    localStorage.getItem("token")
+  );
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const savedToken = localStorage.getItem("token");
-    const savedUser = localStorage.getItem("user");
-    if (savedToken) setToken(savedToken);
-    if (savedUser) setUser(JSON.parse(savedUser));
+    // simulate boot
+    setLoading(false);
   }, []);
 
-  const login = (jwt: string, userData?: any) => {
-    setToken(jwt);
-    localStorage.setItem("token", jwt);
+  const login = useCallback((newToken: string) => {
+    localStorage.setItem("token", newToken);
+    setToken(newToken);
+  }, []);
 
-    if (userData) {
-      setUser(userData);
-      localStorage.setItem("user", JSON.stringify(userData));
-    }
-  };
-
-  const logout = () => {
-    setToken(null);
-    setUser(null);
+  const logout = useCallback(() => {
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
-  };
+    setToken(null);
+  }, []);
 
-  return (
-    <AuthContext.Provider
-      value={{
-        user,
-        token,
-        isAuthenticated: !!token,
-        login,
-        logout,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+  const addToUserHistory = useCallback(
+    async (meetingCode: string) => {
+      if (!token) return;
+      await fetch(`${BASE_URL}/history`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ meetingCode }),
+      }).catch(() => {});
+    },
+    [token]
   );
+
+  const getHistoryOfUser = useCallback(async () => {
+    if (!token) return [];
+    const res = await fetch(`${BASE_URL}/history`, {
+      headers: { Authorization: `Bearer ${token}` },
+    }).catch(() => undefined);
+    if (!res || !res.ok) return [];
+    const data = await res.json();
+    // normalize
+    return (data?.history ?? []) as Array<{
+      meetingCode: string;
+      date: string;
+    }>;
+  }, [token]);
+
+  const value = useMemo(
+    () => ({
+      token,
+      isAuthenticated: !!token,
+      loading,
+      login,
+      logout,
+      addToUserHistory,
+      getHistoryOfUser,
+    }),
+    [token, loading, login, logout, addToUserHistory, getHistoryOfUser]
+  );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

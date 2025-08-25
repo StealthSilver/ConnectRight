@@ -4,7 +4,13 @@ import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 export default function LandingPage() {
-  const { isAuthenticated, user, logout } = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
+
+  if (!authContext) {
+    throw new Error("AuthContext is undefined. Ensure AuthProvider is set up.");
+  }
+
+  const { isAuthenticated, logout } = authContext;
 
   return (
     <div className="landingPageContainer">
@@ -30,7 +36,7 @@ export default function LandingPage() {
             </>
           ) : (
             <>
-              <p>Welcome, {user?.name || "User"}</p>
+              <p>Welcome, User</p>
               <button onClick={logout} className="loginBtn">
                 <p>Logout</p>
               </button>

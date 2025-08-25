@@ -59,7 +59,11 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function Authentication() {
-  const { login } = React.useContext(AuthContext); // ✅ use AuthContext
+  const authContext = React.useContext(AuthContext);
+  if (!authContext) {
+    throw new Error("AuthContext is undefined. Ensure it is provided.");
+  }
+  const { login } = authContext;
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
   const [passwordError, setPasswordError] = React.useState(false);

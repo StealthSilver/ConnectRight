@@ -181,3 +181,11 @@ Database : MongoDB , change to SQL database in production
 - complete the auth flow for the user 
 
 ---------------------------------------------------------------------------------------
+
+9. activating the STUN server
+
+stun servers are lightweight servers running on public internet which return the IP address of the requester's device
+
+- create the stun server and complete the videoMeet functionality 
+- style the video functionality 
+- create the enviornment.tsx file for deploying on server 
