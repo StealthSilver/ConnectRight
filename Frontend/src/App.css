@@ -21,10 +21,23 @@
   align-items: center;
   justify-content: space-between;
   gap: 60px;
+  text-decoration: none;
+  color: white;
 }
 
 .navlist p {
   cursor: pointer;
+}
+
+.navlist a {
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  transition: color 0.3s ease-in-out;
+}
+
+.navlist a:hover {
+  color: #6988ba;
 }
 
 .landingMainContainer {

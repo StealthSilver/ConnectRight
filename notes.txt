@@ -172,3 +172,12 @@ Database : MongoDB , change to SQL database in production
 - create the authentication routes, signin and signup 
 - use material ui components for teh signin and signup pages
 - connect with the backend
+
+---------------------------------------------------------------------------------------
+
+8. create the auth flow
+- create the authcontext int eh contexts folder
+- use the auth context in authentication.tsx and signup.tsx 
+- complete the auth flow for the user 
+
+---------------------------------------------------------------------------------------

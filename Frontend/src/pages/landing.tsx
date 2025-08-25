@@ -1,7 +1,11 @@
 import "../App.css";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 export default function LandingPage() {
+  const { isAuthenticated, user, logout } = useContext(AuthContext);
+
   return (
     <div className="landingPageContainer">
       <nav>
@@ -14,12 +18,24 @@ export default function LandingPage() {
           />
         </div>
         <div className="navlist">
-          <p>Join as guest</p>
-          <p>Register</p>
-
-          <Link to="/login" className="loginBtn">
-            <p>Login</p>
-          </Link>
+          {!isAuthenticated ? (
+            <>
+              <p>Join as guest</p>
+              <Link to="/signup">
+                <p>Sign up</p>
+              </Link>
+              <Link to="/login" className="loginBtn">
+                <p>Login</p>
+              </Link>
+            </>
+          ) : (
+            <>
+              <p>Welcome, {user?.name || "User"}</p>
+              <button onClick={logout} className="loginBtn">
+                <p>Logout</p>
+              </button>
+            </>
+          )}
         </div>
       </nav>
 
@@ -29,9 +45,15 @@ export default function LandingPage() {
             Limitless connection and collaboration <br /> with ConnectRight
           </h1>
 
-          <Link to="/login" className="loginBtn">
-            <p>Get Started</p>
-          </Link>
+          {!isAuthenticated ? (
+            <Link to="/login" className="loginBtn">
+              <p>Get Started</p>
+            </Link>
+          ) : (
+            <Link to="/dashboard" className="loginBtn">
+              <p>Go to Dashboard</p>
+            </Link>
+          )}
         </div>
 
         <div className="heroImg">

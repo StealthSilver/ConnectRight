@@ -14,6 +14,7 @@ import Stack from "@mui/material/Stack";
 import MuiCard from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
 import ForgotPassword from "../components/ForgotPassword";
+import { AuthContext } from "../context/AuthContext";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -58,6 +59,7 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function Authentication() {
+  const { login } = React.useContext(AuthContext); // ✅ use AuthContext
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
   const [passwordError, setPasswordError] = React.useState(false);
@@ -70,7 +72,6 @@ export default function Authentication() {
   const validateInputs = () => {
     const email = document.getElementById("email") as HTMLInputElement;
     const password = document.getElementById("password") as HTMLInputElement;
-
     let isValid = true;
 
     if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
@@ -116,7 +117,7 @@ export default function Authentication() {
         return;
       }
 
-      localStorage.setItem("token", result.token);
+      login(result.token, result.user);
 
       alert("Login successful");
       window.location.href = "/dashboard";
