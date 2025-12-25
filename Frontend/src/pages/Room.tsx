@@ -11,8 +11,10 @@ export const Room: React.FC = () => {
   const userName = searchParams.get("name") || "Anonymous";
   const [copied, setCopied] = useState(false);
 
-  const { joinRoom, leaveRoom, isJoined, peers, localStream, remotePeers } =
-    useWebRTC(roomId || "", userName);
+  const { joinRoom, leaveRoom, peers, localStream, remotePeers } = useWebRTC(
+    roomId || "",
+    userName
+  );
 
   useEffect(() => {
     if (!roomId) {
