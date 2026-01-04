@@ -52,31 +52,41 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       reconnection: true,
       reconnectionDelay: 1000,
       reconnectionDelayMax: 5000,
-      reconnectionAttempts: Infinity,
-      transports: ["websocket", "polling"],
+      reconnectionAttempts: 5,
+      // Prioritize polling on Render's free tier (more reliable than websocket)
+      transports: ["polling", "websocket"],
       upgrade: true,
       rememberUpgrade: true,
       withCredentials: true,
       path: "/socket.io/",
       forceNew: false,
       rejectUnauthorized: false,
+      // Additional timeout settings for better reliability
+      timeout: 10000,
     });
 
     newSocket.on("connect", () => {
-      console.log("Socket connected:", newSocket.id);
+      const transport = newSocket.io?.engine?.transport?.name || "unknown";
+      console.log("Socket connected:", newSocket.id, "via", transport);
       setIsConnected(true);
     });
 
-    newSocket.on("disconnect", () => {
-      console.log("Socket disconnected");
+    newSocket.on("disconnect", (reason) => {
+      console.log("Socket disconnected. Reason:", reason);
       setIsConnected(false);
     });
 
-    newSocket.on("connect_error", (error) => {
-      console.error("Socket connection error:", error);
+    newSocket.on("connect_error", (error: any) => {
+      const transport = newSocket.io?.engine?.transport?.name || "unknown";
+      console.error(
+        "Socket connection error via",
+        transport + ":",
+        error.message || error
+      );
+      console.log("Will attempt to reconnect...");
     });
 
-    newSocket.on("error", (error) => {
+    newSocket.on("error", (error: any) => {
       console.error("Socket error:", error);
     });
 

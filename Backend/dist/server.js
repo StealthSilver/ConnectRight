@@ -16,9 +16,11 @@ const httpServer = (0, http_1.createServer)(app);
 const corsOptions = {
     origin: (process.env.CORS_ORIGIN ||
         process.env.FRONTEND_URL ||
-        "http://localhost:5173").replace(/\/$/, ""),
+        "http://localhost:5173")
+        .split(",")
+        .map((url) => url.trim()),
     credentials: true,
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "OPTIONS"],
 };
 app.use((0, cors_1.default)(corsOptions));
 app.use(express_1.default.json());
@@ -27,9 +29,10 @@ const io = new socket_io_1.Server(httpServer, {
     cors: {
         origin: corsOptions.origin,
         credentials: true,
-        methods: ["GET", "POST"],
+        methods: ["GET", "POST", "OPTIONS"],
     },
-    transports: ["websocket", "polling"],
+    // Prioritize polling for Render compatibility, then websocket
+    transports: ["polling", "websocket"],
     allowEIO3: true,
     pingInterval: 25000,
     pingTimeout: 60000,
@@ -45,6 +48,14 @@ const io = new socket_io_1.Server(httpServer, {
 });
 // Setup socket event handlers
 (0, socket_service_1.setupSocketHandlers)(io);
+// Add debugging for Socket.IO connections
+io.on("connection", (socket) => {
+    const transport = socket.handshake.headers["x-forwarded-proto"] || "unknown";
+    console.log(`[Socket.IO] New connection: ${socket.id} via ${socket.conn.transport.name}`);
+    socket.on("disconnect", () => {
+        console.log(`[Socket.IO] Disconnected: ${socket.id}`);
+    });
+});
 // Health check endpoint
 app.get("/health", (req, res) => {
     res.json({ status: "ok", service: "webrtc-signaling-server" });

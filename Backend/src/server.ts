@@ -33,7 +33,8 @@ const io = new Server(httpServer, {
     credentials: true,
     methods: ["GET", "POST", "OPTIONS"],
   },
-  transports: ["websocket", "polling"],
+  // Prioritize polling for Render compatibility, then websocket
+  transports: ["polling", "websocket"],
   allowEIO3: true,
   pingInterval: 25000,
   pingTimeout: 60000,
@@ -46,11 +47,22 @@ const io = new Server(httpServer, {
   perMessageDeflate: {
     threshold: 16384,
   },
-  // Removed handlePreflightRequest as it's not a valid Socket.IO server option.
 });
 
 // Setup socket event handlers
 setupSocketHandlers(io);
+
+// Add debugging for Socket.IO connections
+io.on("connection", (socket) => {
+  const transport = socket.handshake.headers["x-forwarded-proto"] || "unknown";
+  console.log(
+    `[Socket.IO] New connection: ${socket.id} via ${socket.conn.transport.name}`
+  );
+
+  socket.on("disconnect", () => {
+    console.log(`[Socket.IO] Disconnected: ${socket.id}`);
+  });
+});
 
 // Health check endpoint
 app.get("/health", (req: Request, res: Response) => {
