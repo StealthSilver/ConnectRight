@@ -26,7 +26,11 @@ app.use(express.json());
 
 // Socket.io setup
 const io = new Server(httpServer, {
-  cors: corsOptions,
+  cors: {
+    origin: corsOptions.origin,
+    credentials: true,
+    methods: ["GET", "POST"],
+  },
   transports: ["websocket", "polling"],
   allowEIO3: true,
   pingInterval: 25000,
@@ -36,6 +40,10 @@ const io = new Server(httpServer, {
   maxHttpBufferSize: 1e6,
   serveClient: true,
   connectTimeout: 45000,
+  allowUpgrades: true,
+  perMessageDeflate: {
+    threshold: 16384,
+  },
 });
 
 // Setup socket event handlers
