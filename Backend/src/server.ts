@@ -16,9 +16,11 @@ const corsOptions = {
     process.env.CORS_ORIGIN ||
     process.env.FRONTEND_URL ||
     "http://localhost:5173"
-  ).replace(/\/$/, ""),
+  )
+    .split(",")
+    .map((url) => url.trim()),
   credentials: true,
-  methods: ["GET", "POST"],
+  methods: ["GET", "POST", "OPTIONS"],
 };
 
 app.use(cors(corsOptions));
@@ -29,7 +31,7 @@ const io = new Server(httpServer, {
   cors: {
     origin: corsOptions.origin,
     credentials: true,
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "OPTIONS"],
   },
   transports: ["websocket", "polling"],
   allowEIO3: true,
@@ -44,15 +46,7 @@ const io = new Server(httpServer, {
   perMessageDeflate: {
     threshold: 16384,
   },
-  handlePreflightRequest: (req, res) => {
-    const headers = {
-      "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      "Access-Control-Allow-Origin": corsOptions.origin,
-      "Access-Control-Allow-Credentials": "true",
-    };
-    res.writeHead(200, headers);
-    res.end();
-  },
+  // Removed handlePreflightRequest as it's not a valid Socket.IO server option.
 });
 
 // Setup socket event handlers
