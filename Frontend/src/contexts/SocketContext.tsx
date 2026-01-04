@@ -28,8 +28,27 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    const socketUrl =
-      import.meta.env.VITE_SOCKET_URL || "http://localhost:4000";
+    // Determine socket URL based on environment
+    let socketUrl = import.meta.env.VITE_SOCKET_URL;
+
+    if (!socketUrl) {
+      // If not set, use current origin for same-domain deployments
+      // or fallback to localhost for development
+      if (typeof window !== "undefined") {
+        const protocol =
+          window.location.protocol === "https:" ? "https:" : "http:";
+        const host = window.location.host;
+        // Check if we're in development
+        if (host.includes("localhost") || host.includes("127.0.0.1")) {
+          socketUrl = "http://localhost:4000";
+        } else {
+          // Use same origin for deployed app
+          socketUrl = `${protocol}//${host}`;
+        }
+      } else {
+        socketUrl = "http://localhost:4000";
+      }
+    }
 
     const newSocket = io(socketUrl, {
       autoConnect: true,
@@ -40,10 +59,9 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       transports: ["websocket", "polling"],
       upgrade: true,
       rememberUpgrade: true,
-      secure: socketUrl.startsWith("https"),
-      rejectUnauthorized: false,
       withCredentials: true,
       path: "/socket.io/",
+      forceNew: false,
     });
 
     newSocket.on("connect", () => {
@@ -54,6 +72,14 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     newSocket.on("disconnect", () => {
       console.log("Socket disconnected");
       setIsConnected(false);
+    });
+
+    newSocket.on("connect_error", (error) => {
+      console.error("Socket connection error:", error);
+    });
+
+    newSocket.on("error", (error) => {
+      console.error("Socket error:", error);
     });
 
     setSocket(newSocket);
