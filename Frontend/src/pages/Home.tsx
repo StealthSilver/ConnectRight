@@ -34,10 +34,11 @@ export const Home: React.FC = () => {
       style={{
         minHeight: "100vh",
         display: "flex",
+        flexDirection: window.innerWidth <= 768 ? "column" : "row",
         background:
           "radial-gradient(circle at top left, #1e3a8a 0%, #020617 45%)",
         color: "#f8fafc",
-        padding: "24px",
+        padding: window.innerWidth <= 640 ? "16px" : "24px",
       }}
     >
       {/* Left – Marketing / Hero */}
@@ -46,8 +47,14 @@ export const Home: React.FC = () => {
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
-          padding: "80px",
+          justifyContent: window.innerWidth <= 768 ? "flex-start" : "center",
+          padding:
+            window.innerWidth <= 640
+              ? "24px 0"
+              : window.innerWidth <= 768
+              ? "40px 20px"
+              : "80px",
+          paddingTop: window.innerWidth <= 768 ? "20px" : "80px",
         }}
       >
         <span
@@ -55,16 +62,16 @@ export const Home: React.FC = () => {
             display: "inline-flex",
             alignItems: "center",
             gap: "8px",
-            padding: "8px 14px",
+            padding: window.innerWidth <= 640 ? "6px 12px" : "8px 14px",
             borderRadius: "999px",
-            fontSize: "12px",
+            fontSize: window.innerWidth <= 640 ? "10px" : "12px",
             fontWeight: 600,
             letterSpacing: "0.4px",
             color: "#93c5fd",
             background: "rgba(59,130,246,0.12)",
             border: "1px solid rgba(59,130,246,0.25)",
             width: "fit-content",
-            marginBottom: "32px",
+            marginBottom: window.innerWidth <= 640 ? "16px" : "32px",
           }}
         >
           WebRTC Powered Meetings
@@ -72,10 +79,15 @@ export const Home: React.FC = () => {
 
         <h1
           style={{
-            fontSize: "60px",
+            fontSize:
+              window.innerWidth <= 640
+                ? "32px"
+                : window.innerWidth <= 768
+                ? "44px"
+                : "60px",
             lineHeight: "1.05",
             fontWeight: 800,
-            marginBottom: "28px",
+            marginBottom: window.innerWidth <= 640 ? "16px" : "28px",
             letterSpacing: "-0.03em",
           }}
         >
@@ -94,18 +106,29 @@ export const Home: React.FC = () => {
 
         <p
           style={{
-            fontSize: "18px",
+            fontSize:
+              window.innerWidth <= 640
+                ? "14px"
+                : window.innerWidth <= 768
+                ? "15px"
+                : "18px",
             maxWidth: "620px",
             color: "#94a3b8",
             lineHeight: "1.7",
-            marginBottom: "48px",
+            marginBottom: window.innerWidth <= 640 ? "24px" : "48px",
           }}
         >
           Host secure, real-time video meetings with zero setup. Create or join
           rooms instantly with enterprise-grade performance and privacy.
         </p>
 
-        <div style={{ display: "flex", gap: "48px" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: window.innerWidth <= 640 ? "column" : "row",
+            gap: window.innerWidth <= 640 ? "16px" : "48px",
+          }}
+        >
           {[
             ["Ultra HD", "Crystal-clear video"],
             ["Instant Join", "No installs required"],
@@ -114,7 +137,7 @@ export const Home: React.FC = () => {
             <div key={title}>
               <div
                 style={{
-                  fontSize: "14px",
+                  fontSize: window.innerWidth <= 640 ? "12px" : "14px",
                   fontWeight: 700,
                   color: "#60a5fa",
                   marginBottom: "6px",
@@ -122,7 +145,14 @@ export const Home: React.FC = () => {
               >
                 {title}
               </div>
-              <div style={{ fontSize: "13px", color: "#64748b" }}>{desc}</div>
+              <div
+                style={{
+                  fontSize: window.innerWidth <= 640 ? "11px" : "13px",
+                  color: "#64748b",
+                }}
+              >
+                {desc}
+              </div>
             </div>
           ))}
         </div>
@@ -135,14 +165,20 @@ export const Home: React.FC = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          padding: window.innerWidth <= 768 ? "20px 0" : "0",
         }}
       >
         <div
           style={{
             width: "100%",
-            maxWidth: "460px",
-            padding: "48px",
-            borderRadius: "20px",
+            maxWidth: window.innerWidth <= 640 ? "100%" : "460px",
+            padding:
+              window.innerWidth <= 640
+                ? "32px"
+                : window.innerWidth <= 768
+                ? "40px"
+                : "48px",
+            borderRadius: window.innerWidth <= 640 ? "16px" : "20px",
             background:
               "linear-gradient(180deg, rgba(30,41,59,0.85), rgba(15,23,42,0.85))",
             backdropFilter: "blur(14px)",
@@ -152,7 +188,7 @@ export const Home: React.FC = () => {
         >
           <h2
             style={{
-              fontSize: "30px",
+              fontSize: window.innerWidth <= 640 ? "24px" : "30px",
               fontWeight: 700,
               marginBottom: "6px",
             }}
@@ -161,16 +197,20 @@ export const Home: React.FC = () => {
           </h2>
           <p
             style={{
-              fontSize: "15px",
+              fontSize: window.innerWidth <= 640 ? "13px" : "15px",
               color: "#94a3b8",
-              marginBottom: "36px",
+              marginBottom: window.innerWidth <= 640 ? "24px" : "36px",
             }}
           >
             Join an existing meeting or create a new one
           </p>
 
           <div
-            style={{ display: "flex", flexDirection: "column", gap: "22px" }}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: window.innerWidth <= 640 ? "16px" : "22px",
+            }}
           >
             {/* Name */}
             <input
@@ -201,11 +241,10 @@ export const Home: React.FC = () => {
             >
               Create New Room
             </button>
-
             <div
               style={{
                 textAlign: "center",
-                fontSize: "12px",
+                fontSize: window.innerWidth <= 640 ? "11px" : "12px",
                 color: "#64748b",
                 letterSpacing: "1px",
               }}
@@ -229,8 +268,8 @@ export const Home: React.FC = () => {
 
           <p
             style={{
-              marginTop: "28px",
-              fontSize: "12px",
+              marginTop: window.innerWidth <= 640 ? "20px" : "28px",
+              fontSize: window.innerWidth <= 640 ? "11px" : "12px",
               color: "#9ca3af",
               textAlign: "center",
             }}
@@ -245,33 +284,48 @@ export const Home: React.FC = () => {
 
 /* ---------- Styles ---------- */
 
-const inputStyle: React.CSSProperties = {
-  width: "100%",
-  padding: "14px 16px",
-  borderRadius: "10px",
-  border: "1px solid rgba(148,163,184,0.2)",
-  background: "rgba(2,6,23,0.6)",
-  color: "#f8fafc",
-  fontSize: "15px",
-  outline: "none",
+const getInputStyle = (): React.CSSProperties => {
+  const isSmall = window.innerWidth <= 640;
+  return {
+    width: "100%",
+    padding: isSmall ? "12px 14px" : "14px 16px",
+    borderRadius: "10px",
+    border: "1px solid rgba(148,163,184,0.2)",
+    background: "rgba(2,6,23,0.6)",
+    color: "#f8fafc",
+    fontSize: isSmall ? "14px" : "15px",
+    outline: "none",
+  };
 };
 
-const primaryButton: React.CSSProperties = {
-  padding: "14px",
-  borderRadius: "10px",
-  border: "none",
-  fontWeight: 600,
-  fontSize: "15px",
-  background: "linear-gradient(90deg, #3b82f6, #2563eb)",
-  color: "#fff",
+const inputStyle: React.CSSProperties = getInputStyle();
+
+const getPrimaryButtonStyle = (): React.CSSProperties => {
+  const isSmall = window.innerWidth <= 640;
+  return {
+    padding: isSmall ? "12px" : "14px",
+    borderRadius: "10px",
+    border: "none",
+    fontWeight: 600,
+    fontSize: isSmall ? "14px" : "15px",
+    background: "linear-gradient(90deg, #3b82f6, #2563eb)",
+    color: "#fff",
+  };
 };
 
-const secondaryButton: React.CSSProperties = {
-  padding: "14px",
-  borderRadius: "10px",
-  border: "1px solid #3b82f6",
-  fontWeight: 600,
-  fontSize: "15px",
-  background: "transparent",
-  color: "#3b82f6",
+const primaryButton: React.CSSProperties = getPrimaryButtonStyle();
+
+const getSecondaryButtonStyle = (): React.CSSProperties => {
+  const isSmall = window.innerWidth <= 640;
+  return {
+    padding: isSmall ? "12px" : "14px",
+    borderRadius: "10px",
+    border: "1px solid #3b82f6",
+    fontWeight: 600,
+    fontSize: isSmall ? "14px" : "15px",
+    background: "transparent",
+    color: "#3b82f6",
+  };
 };
+
+const secondaryButton: React.CSSProperties = getSecondaryButtonStyle();

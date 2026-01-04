@@ -14,6 +14,10 @@ export const MediaControls: React.FC<MediaControlsProps> = ({
   const { toggleAudio, toggleVideo, isAudioMuted, isVideoMuted } = usePeer();
   const { socket } = useSocket();
 
+  const isMobile = window.innerWidth <= 640;
+  const buttonSize = isMobile ? "40px" : "48px";
+  const iconSize = isMobile ? "16" : "20";
+
   const handleToggleAudio = () => {
     toggleAudio();
     if (socket) {
@@ -35,8 +39,8 @@ export const MediaControls: React.FC<MediaControlsProps> = ({
   };
 
   const buttonStyle = (isActive: boolean, isDestructive = false) => ({
-    width: "48px",
-    height: "48px",
+    width: buttonSize,
+    height: buttonSize,
     borderRadius: "8px",
     border: "1px solid",
     borderColor: isActive ? (isDestructive ? "#ef4444" : "#3b82f6") : "#334155",
@@ -57,12 +61,13 @@ export const MediaControls: React.FC<MediaControlsProps> = ({
     <div
       style={{
         display: "flex",
-        gap: "16px",
-        padding: "20px",
+        gap: isMobile ? "10px" : "16px",
+        padding: isMobile ? "14px" : "20px",
         justifyContent: "center",
         alignItems: "center",
         background: "#020617",
         borderTop: "1px solid #1e293b",
+        flexWrap: "wrap",
       }}
     >
       <button
@@ -71,8 +76,8 @@ export const MediaControls: React.FC<MediaControlsProps> = ({
         title={isAudioMuted ? "Unmute" : "Mute"}
       >
         <svg
-          width="20"
-          height="20"
+          width={iconSize}
+          height={iconSize}
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -105,8 +110,8 @@ export const MediaControls: React.FC<MediaControlsProps> = ({
         title={isVideoMuted ? "Start Video" : "Stop Video"}
       >
         <svg
-          width="20"
-          height="20"
+          width={iconSize}
+          height={iconSize}
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -132,13 +137,13 @@ export const MediaControls: React.FC<MediaControlsProps> = ({
         onClick={onLeave}
         style={{
           ...buttonStyle(true, true),
-          width: "48px",
+          width: buttonSize,
         }}
         title="Leave Room"
       >
         <svg
-          width="20"
-          height="20"
+          width={iconSize}
+          height={iconSize}
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"

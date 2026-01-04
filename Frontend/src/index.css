@@ -35,6 +35,11 @@ button {
   font-family: inherit;
 }
 
+input {
+  font-family: inherit;
+  font-size: inherit;
+}
+
 /* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 8px;
@@ -52,4 +57,32 @@ button {
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(102, 126, 234, 0.7);
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+
+  input {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+
+  button {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+  }
+}
+
+/* Prevent horizontal scroll on small devices */
+@media (max-width: 640px) {
+  body {
+    min-width: auto;
+    width: 100%;
+  }
+
+  #root {
+    width: 100%;
+  }
 }

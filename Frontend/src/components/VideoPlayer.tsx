@@ -22,6 +22,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   }, [stream]);
 
   const hasVideo = stream?.getVideoTracks().some((t) => t.enabled);
+  const isMobile = window.innerWidth <= 640;
 
   return (
     <div
@@ -29,7 +30,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         position: "relative",
         width: "100%",
         aspectRatio: "16 / 9",
-        borderRadius: "14px",
+        borderRadius: isMobile ? "10px" : "14px",
         overflow: "hidden",
         background: "#020617",
         border: "1px solid #1e293b",
@@ -61,14 +62,14 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         >
           <div
             style={{
-              width: "88px",
-              height: "88px",
+              width: isMobile ? "60px" : "88px",
+              height: isMobile ? "60px" : "88px",
               borderRadius: "50%",
               background: "#1e293b",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: "34px",
+              fontSize: isMobile ? "24px" : "34px",
               fontWeight: 600,
               color: "#e5e7eb",
             }}
@@ -82,15 +83,19 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         <div
           style={{
             position: "absolute",
-            bottom: "12px",
-            left: "12px",
-            padding: "6px 10px",
+            bottom: isMobile ? "8px" : "12px",
+            left: isMobile ? "8px" : "12px",
+            padding: isMobile ? "4px 8px" : "6px 10px",
             borderRadius: "6px",
             background: "rgba(2,6,23,0.85)",
             border: "1px solid #1e293b",
             color: "#f8fafc",
-            fontSize: "12px",
+            fontSize: isMobile ? "10px" : "12px",
             fontWeight: 500,
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            maxWidth: "90%",
           }}
         >
           {isLocal ? "● " : ""}

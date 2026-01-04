@@ -39,6 +39,8 @@ export const Room: React.FC = () => {
   };
 
   const totalParticipants = peers.length + 1;
+  const isMobile = window.innerWidth <= 640;
+  const isTablet = window.innerWidth <= 1024;
 
   return (
     <div
@@ -46,36 +48,66 @@ export const Room: React.FC = () => {
         height: "100vh",
         display: "flex",
         flexDirection: "column",
-        background: "#020617", // neutral, professional
+        background: "#020617",
       }}
     >
       {/* Header */}
       <header
         style={{
-          padding: "16px 32px",
+          padding: isMobile
+            ? "12px 16px"
+            : isTablet
+            ? "14px 24px"
+            : "16px 32px",
           display: "flex",
           justifyContent: "space-between",
-          alignItems: "center",
+          alignItems: isMobile ? "flex-start" : "center",
+          flexDirection: isMobile ? "column" : "row",
+          gap: isMobile ? "12px" : "0",
           background: "#020617",
           borderBottom: "1px solid #1e293b",
         }}
       >
-        <div style={{ display: "flex", gap: "18px", alignItems: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: isMobile ? "12px" : "18px",
+            alignItems: "flex-start",
+            flex: 1,
+          }}
+        >
           <div
             style={{
               width: "10px",
               height: "10px",
               borderRadius: "50%",
               background: "#22c55e",
+              marginTop: "2px",
+              flexShrink: 0,
             }}
           />
           <div>
-            <div style={{ fontWeight: 600, color: "#f8fafc" }}>{userName}</div>
-            <div style={{ display: "flex", gap: "10px", marginTop: "4px" }}>
+            <div
+              style={{
+                fontWeight: 600,
+                color: "#f8fafc",
+                fontSize: isMobile ? "14px" : "16px",
+              }}
+            >
+              {userName}
+            </div>
+            <div
+              style={{
+                display: "flex",
+                gap: isMobile ? "6px" : "10px",
+                marginTop: "4px",
+                flexWrap: "wrap",
+              }}
+            >
               <span
                 style={{
                   fontFamily: "monospace",
-                  fontSize: "12px",
+                  fontSize: isMobile ? "10px" : "12px",
                   color: "#94a3b8",
                 }}
               >
@@ -84,13 +116,14 @@ export const Room: React.FC = () => {
               <button
                 onClick={copyRoomId}
                 style={{
-                  fontSize: "11px",
-                  padding: "4px 10px",
+                  fontSize: isMobile ? "9px" : "11px",
+                  padding: isMobile ? "3px 8px" : "4px 10px",
                   borderRadius: "6px",
                   border: "1px solid #334155",
                   background: "transparent",
                   color: copied ? "#22c55e" : "#94a3b8",
                   cursor: "pointer",
+                  fontWeight: 500,
                 }}
               >
                 {copied ? "COPIED" : "COPY"}
@@ -101,7 +134,7 @@ export const Room: React.FC = () => {
 
         <div
           style={{
-            fontSize: "13px",
+            fontSize: isMobile ? "12px" : isTablet ? "12px" : "13px",
             color: "#cbd5f5",
             fontWeight: 500,
           }}
@@ -115,23 +148,27 @@ export const Room: React.FC = () => {
       <main
         style={{
           flex: 1,
-          padding: "28px",
+          padding: isMobile ? "12px" : isTablet ? "16px" : "28px",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          overflow: "auto",
         }}
       >
         <div
           style={{
             width: "100%",
             display: "grid",
-            gap: "24px",
-            gridTemplateColumns:
-              totalParticipants === 1
-                ? "1fr"
-                : totalParticipants === 2
-                ? "repeat(2, 1fr)"
-                : "repeat(auto-fit, minmax(360px, 1fr))",
+            gap: isMobile ? "8px" : isTablet ? "12px" : "24px",
+            gridTemplateColumns: isMobile
+              ? "1fr"
+              : totalParticipants === 1
+              ? "1fr"
+              : totalParticipants === 2 && !isTablet
+              ? "repeat(2, 1fr)"
+              : isTablet
+              ? "repeat(auto-fit, minmax(300px, 1fr))"
+              : "repeat(auto-fit, minmax(360px, 1fr))",
             maxWidth: totalParticipants === 1 ? "900px" : "100%",
           }}
         >
