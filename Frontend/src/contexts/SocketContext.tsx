@@ -35,14 +35,13 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       // If not set, use current origin for same-domain deployments
       // or fallback to localhost for development
       if (typeof window !== "undefined") {
-        const protocol =
-          window.location.protocol === "https:" ? "https:" : "http:";
+        const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
         const host = window.location.host;
         // Check if we're in development
         if (host.includes("localhost") || host.includes("127.0.0.1")) {
           socketUrl = "http://localhost:4000";
         } else {
-          // Use same origin for deployed app
+          // Use same origin for deployed app (with proper protocol)
           socketUrl = `${protocol}//${host}`;
         }
       } else {
@@ -62,6 +61,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       withCredentials: true,
       path: "/socket.io/",
       forceNew: false,
+      rejectUnauthorized: false,
     });
 
     newSocket.on("connect", () => {

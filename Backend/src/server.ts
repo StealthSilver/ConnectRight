@@ -44,6 +44,15 @@ const io = new Server(httpServer, {
   perMessageDeflate: {
     threshold: 16384,
   },
+  handlePreflightRequest: (req, res) => {
+    const headers = {
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      "Access-Control-Allow-Origin": corsOptions.origin,
+      "Access-Control-Allow-Credentials": "true",
+    };
+    res.writeHead(200, headers);
+    res.end();
+  },
 });
 
 // Setup socket event handlers
