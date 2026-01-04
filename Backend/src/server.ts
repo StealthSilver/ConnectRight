@@ -12,7 +12,10 @@ const httpServer = createServer(app);
 
 // CORS configuration
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+  origin: (process.env.CORS_ORIGIN || "http://localhost:5173").replace(
+    /\/$/,
+    ""
+  ),
   credentials: true,
 };
 
@@ -21,7 +24,11 @@ app.use(express.json());
 
 // Socket.io setup
 const io = new Server(httpServer, {
-  cors: corsOptions,
+  cors: {
+    origin: corsOptions.origin,
+    credentials: true,
+  },
+  transports: ["websocket", "polling"],
 });
 
 // Setup socket event handlers

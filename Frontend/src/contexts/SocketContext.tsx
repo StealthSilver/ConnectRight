@@ -32,6 +32,12 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       import.meta.env.VITE_SOCKET_URL || "http://localhost:4000";
     const newSocket = io(socketUrl, {
       autoConnect: true,
+      reconnection: true,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
+      reconnectionAttempts: 5,
+      transports: ["websocket", "polling"],
+      secure: true,
     });
 
     newSocket.on("connect", () => {
