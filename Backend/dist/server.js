@@ -26,6 +26,9 @@ const io = new socket_io_1.Server(httpServer, {
         credentials: true,
     },
     transports: ["websocket", "polling"],
+    allowEIO3: true,
+    pingInterval: 25000,
+    pingTimeout: 60000,
 });
 // Setup socket event handlers
 (0, socket_service_1.setupSocketHandlers)(io);

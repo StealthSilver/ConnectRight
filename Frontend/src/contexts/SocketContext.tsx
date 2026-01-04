@@ -35,9 +35,10 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       reconnection: true,
       reconnectionDelay: 1000,
       reconnectionDelayMax: 5000,
-      reconnectionAttempts: 5,
+      reconnectionAttempts: Infinity,
       transports: ["websocket", "polling"],
-      secure: true,
+      upgrade: true,
+      rememberUpgrade: true,
     });
 
     newSocket.on("connect", () => {
