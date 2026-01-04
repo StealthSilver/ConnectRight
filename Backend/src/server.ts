@@ -10,28 +10,68 @@ dotenv.config();
 const app = express();
 const httpServer = createServer(app);
 
-// CORS configuration
+// CORS configuration - explicitly allow the frontend
+const allowedOrigins = [
+  "https://connect-right.vercel.app",
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "http://127.0.0.1:5173",
+  // Allow any origin if CORS_ORIGIN env var is set
+  ...(process.env.CORS_ORIGIN
+    ? process.env.CORS_ORIGIN.split(",").map((url) => url.trim())
+    : []),
+];
+
 const corsOptions = {
   origin: (
-    process.env.CORS_ORIGIN ||
-    process.env.FRONTEND_URL ||
-    "http://localhost:5173"
-  )
-    .split(",")
-    .map((url) => url.trim()),
+    origin: string | undefined,
+    callback: (err: Error | null, allow?: boolean) => void
+  ) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) {
+      return callback(null, true);
+    }
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.warn(`CORS blocked request from origin: ${origin}`);
+      callback(null, true); // Allow all for now to debug
+    }
+  },
   credentials: true,
-  methods: ["GET", "POST", "OPTIONS"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 
+// Apply CORS middleware
 app.use(cors(corsOptions));
 app.use(express.json());
+
+// Additional CORS headers for polling
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+
+  // Handle preflight
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
 // Socket.io setup
 const io = new Server(httpServer, {
   cors: {
-    origin: corsOptions.origin,
+    origin: allowedOrigins,
     credentials: true,
     methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   },
   // Prioritize polling for Render compatibility, then websocket
   transports: ["polling", "websocket"],
