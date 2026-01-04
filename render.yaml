@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: connectright-backend
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: cd Backend && npm install && npm run build
+    startCommand: cd Backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CORS_ORIGIN
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: PORT
+        value: 4000
+      - key: HOST
+        value: 0.0.0.0
