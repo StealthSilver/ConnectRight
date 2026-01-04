@@ -30,6 +30,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   useEffect(() => {
     const socketUrl =
       import.meta.env.VITE_SOCKET_URL || "http://localhost:4000";
+
     const newSocket = io(socketUrl, {
       autoConnect: true,
       reconnection: true,
@@ -39,6 +40,10 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       transports: ["websocket", "polling"],
       upgrade: true,
       rememberUpgrade: true,
+      secure: socketUrl.startsWith("https"),
+      rejectUnauthorized: false,
+      withCredentials: true,
+      path: "/socket.io/",
     });
 
     newSocket.on("connect", () => {

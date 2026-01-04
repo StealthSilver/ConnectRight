@@ -24,11 +24,15 @@ const io = new socket_io_1.Server(httpServer, {
     cors: {
         origin: corsOptions.origin,
         credentials: true,
+        methods: ["GET", "POST"],
     },
     transports: ["websocket", "polling"],
     allowEIO3: true,
     pingInterval: 25000,
     pingTimeout: 60000,
+    path: "/socket.io/",
+    upgradeTimeout: 10000,
+    maxHttpBufferSize: 1e6,
 });
 // Setup socket event handlers
 (0, socket_service_1.setupSocketHandlers)(io);
