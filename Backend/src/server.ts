@@ -1,4 +1,4 @@
-import express from "express";
+import express, { type Request, type Response } from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import cors from "cors";
@@ -50,7 +50,7 @@ const io = new Server(httpServer, {
 setupSocketHandlers(io);
 
 // Health check endpoint
-app.get("/health", (req, res) => {
+app.get("/health", (req: Request, res: Response) => {
   res.json({ status: "ok", service: "webrtc-signaling-server" });
 });
 

@@ -14,8 +14,11 @@ const app = (0, express_1.default)();
 const httpServer = (0, http_1.createServer)(app);
 // CORS configuration
 const corsOptions = {
-    origin: (process.env.CORS_ORIGIN || "http://localhost:5173").replace(/\/$/, ""),
+    origin: (process.env.CORS_ORIGIN ||
+        process.env.FRONTEND_URL ||
+        "http://localhost:5173").replace(/\/$/, ""),
     credentials: true,
+    methods: ["GET", "POST"],
 };
 app.use((0, cors_1.default)(corsOptions));
 app.use(express_1.default.json());
@@ -33,6 +36,12 @@ const io = new socket_io_1.Server(httpServer, {
     path: "/socket.io/",
     upgradeTimeout: 10000,
     maxHttpBufferSize: 1e6,
+    serveClient: true,
+    connectTimeout: 45000,
+    allowUpgrades: true,
+    perMessageDeflate: {
+        threshold: 16384,
+    },
 });
 // Setup socket event handlers
 (0, socket_service_1.setupSocketHandlers)(io);
@@ -40,8 +49,11 @@ const io = new socket_io_1.Server(httpServer, {
 app.get("/health", (req, res) => {
     res.json({ status: "ok", service: "webrtc-signaling-server" });
 });
-const PORT = process.env.PORT || 4000;
-httpServer.listen(PORT, () => {
-    console.log(`WebRTC Signaling Server running on port ${PORT}`);
+const PORT = Number(process.env.PORT) || 4000;
+const HOST = process.env.HOST || "0.0.0.0";
+httpServer.listen(PORT, HOST, () => {
+    console.log(`WebRTC Signaling Server running on ${HOST}:${PORT}`);
+    console.log(`CORS Origin: ${corsOptions.origin}`);
+    console.log(`WebSocket path: /socket.io/`);
 });
 //# sourceMappingURL=server.js.map
